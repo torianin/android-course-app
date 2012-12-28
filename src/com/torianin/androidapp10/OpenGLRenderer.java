@@ -10,7 +10,6 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
-import android.util.Log;
 
 public class OpenGLRenderer implements GLSurfaceView.Renderer
 {
@@ -19,8 +18,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer
     private final static int INDEXES = 3;   // liczba indeksów
     private FloatBuffer vb;  // bufor wierzcho³ków (vertex buffer)
     private ShortBuffer ib;  // bufor indeksów (index buffer)
-    float x;
-    float y;
+    private int st = 1;
     
     public float[] srodek(float x1, float y1, float x2, float y2){
 		float srodek[] = {
@@ -52,11 +50,12 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer
         gl.glColor4f(1.0f, 0.0f, 0.0f, 0.5f); // kolor rysowania czerwony (model koloru RGBA)
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vb); // bufor wierzcho³ków
         gl.glDrawElements(GL10.GL_TRIANGLES, INDEXES, GL10.GL_UNSIGNED_SHORT, ib); // rys. z bufora indeksów
-        sierpinski(gl,points,3);
+        if (st>0){
+        sierpinski(gl,points,st);
+        }
     }
     
     public void sierpinski(GL10 gl,float points[],int st){ // definicja rekurencyjnego trójk¹ta
-        st = st-1;
     	float newpoints[] =  // kolejnoœæ wierzcho³ków przeciwna do ruchu wskazówek zegara
         {                 // uk³ad wspó³rzêdnych prawoskrêtny
         	 srodek(points[0],points[1],points[3],points[4])[0],srodek(points[0],points[1],points[3],points[4])[1], 0,  // 0
@@ -78,13 +77,27 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer
         gl.glColor4f(0.5f, 0.5f, 0.5f, 1.0f); // kolor rysowania czerwony (model koloru RGBA)
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vb); // bufor wierzcho³ków
         gl.glDrawElements(GL10.GL_TRIANGLES, INDEXES, GL10.GL_UNSIGNED_SHORT, ib); // rys. z bufora indeksów
-        if (st!=1){
+        if (st>1 ){
         float generatenew[] = {
         		points[0],points[1],0,
         		newpoints[0],newpoints[1],0,
         		newpoints[6],newpoints[7],0,
         };
-        sierpinski( gl, generatenew , st);
+        sierpinski( gl, generatenew , st-1);
+        
+        float generatenew2[] = {
+        		newpoints[0],newpoints[1],0,
+        		points[3],points[4],0,
+        		newpoints[3],newpoints[4],0,
+        };
+        sierpinski( gl, generatenew2 , st-1);
+        
+        float generatenew3[] = {
+        		newpoints[6],newpoints[7],0,
+        		newpoints[3],newpoints[4],0,
+        		points[6],points[7],0,
+        };
+        sierpinski( gl, generatenew3 , st-1);
         }
     }
     
