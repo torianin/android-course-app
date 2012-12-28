@@ -17,7 +17,7 @@ public class OpenGLActivity extends Activity
         sv = new GLSurfaceView(this);
         sv.setRenderer(new OpenGLRenderer());  // ustalenie obiektu kontroluj¹cego rysowanie (tzw. renderer)
         // odrysowanie tylko w razie potrzeby (nale¿y w³¹czyæ dla grafiki statycznej):
-        sv.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        sv.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         setContentView(sv);  // zawartoœæ widoku to powierzchnia rysowania
     }
     
